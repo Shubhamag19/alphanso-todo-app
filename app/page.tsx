@@ -18,8 +18,11 @@ export default function Home() {
   const [currentTask, setCurrentTask] = useState("");
 
   const [userTasks, setUserTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("userTasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
+    if (typeof window !== "undefined") {
+      const savedTasks = localStorage.getItem("userTasks");
+      return savedTasks ? JSON.parse(savedTasks) : [];
+    }
+    return [];
   });
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [displayUserTasks, setDisplayUserTasks] = useState<Task[]>([]);
@@ -87,7 +90,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    localStorage.setItem("userTasks", JSON.stringify(userTasks));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("userTasks", JSON.stringify(userTasks));
+    }
   }, [userTasks]);
 
   useEffect(() => {
